@@ -3,9 +3,9 @@ requires = ["setuptools>=75"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "repository-vulnerability-report-mcp"
+name = "repo-dast-audit-mcp"
 version = "0.1.0"
-description = "Read-only, bounded repository vulnerability report MCP server"
+description = "Docker/browser-based dynamic vulnerability audit (DAST) MCP server for local repository web apps"
 requires-python = ">=3.12,<3.13"
 dependencies = []
 
@@ -13,11 +13,11 @@ dependencies = []
 test = ["jsonschema==4.23.0"]
 
 [project.scripts]
-repository-vulnerability-report-mcp = "repository_vulnerability_report_mcp.server:main"
-repository-web-audit-setup = "repository_vulnerability_report_mcp.web_audit.setup:main"
+repo-dast-audit-mcp = "repo_dast_audit_mcp.server:main"
+repo-dast-audit-setup = "repo_dast_audit_mcp.web_audit.setup:main"
 
 [tool.setuptools.package-data]
-"repository_vulnerability_report_mcp.web_audit" = ["*.json", "*.cjs"]
+"repo_dast_audit_mcp.web_audit" = ["*.json", "*.cjs"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -1,6 +1,6 @@
 import time
 import unittest
-from repository_vulnerability_report_mcp.ast_worker import analyze_isolated_python
+from repo_dast_audit_mcp.ast_worker import analyze_isolated_python
 
 class IsolatedAstTests(unittest.TestCase):
     def test_real_subprocess_detects_without_evaluating_source(self):

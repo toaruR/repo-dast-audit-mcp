@@ -25,7 +25,7 @@ def render_markdown(report: Mapping[str, Any], *, markdown_bytes: int | None = N
     if type(limit) is not int or limit < 1:
         raise ReportError("markdown byte limit must be a positive integer")
     lines = [
-        "# Repository vulnerability report", "",
+        "# Repository DAST audit report", "",
         f"Scan: `{escape_markdown(report['scan_id'])}`  ",
         f"Revision: {report['revision']}  ",
         f"State: {escape_markdown(report['state'])}",

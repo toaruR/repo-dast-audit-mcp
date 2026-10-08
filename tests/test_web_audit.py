@@ -10,12 +10,12 @@ import time
 import unittest
 from unittest.mock import patch
 import uuid
-from repository_vulnerability_report_mcp.protocol import JsonRpcProtocol
-from repository_vulnerability_report_mcp.web_audit.contracts import ContractError, DEFS, SCHEMA, matches, validate_input
-from repository_vulnerability_report_mcp.web_audit.profiles import AuditError, canonical, redact
-from repository_vulnerability_report_mcp.web_audit.setup import reference_profile
-from repository_vulnerability_report_mcp.web_audit.storage import CacheLock
-from repository_vulnerability_report_mcp.web_audit.supervisor import WebAuditService
+from repo_dast_audit_mcp.protocol import JsonRpcProtocol
+from repo_dast_audit_mcp.web_audit.contracts import ContractError, DEFS, SCHEMA, matches, validate_input
+from repo_dast_audit_mcp.web_audit.profiles import AuditError, canonical, redact
+from repo_dast_audit_mcp.web_audit.setup import reference_profile
+from repo_dast_audit_mcp.web_audit.storage import CacheLock
+from repo_dast_audit_mcp.web_audit.supervisor import WebAuditService
 
 try:
     from jsonschema import Draft202012Validator, FormatChecker
@@ -254,7 +254,7 @@ class SupervisorTests(unittest.TestCase):
             job["state"]="exploring"; job["actions"][action_id]={"action_id":action_id,"client_action_id":str(uuid.uuid4()),
                 "status":"dispatched","observation_ids":[],"artifact_ids":[],"reason":None}
             self.service._save(job)
-        with patch("repository_vulnerability_report_mcp.web_audit.supervisor.DockerRuntime.recover",return_value=True):
+        with patch("repo_dast_audit_mcp.web_audit.supervisor.DockerRuntime.recover",return_value=True):
             second=WebAuditService(self.base/"cache",self.registry,FakeRuntime)
         self.service=second
         recovered=self.call("get_web_audit",{"audit_id":audit})

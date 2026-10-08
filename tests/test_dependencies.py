@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from repository_vulnerability_report_mcp.dependencies import Package, parse_package_lock, parse_requirements, query_osv
+from repo_dast_audit_mcp.dependencies import Package, parse_package_lock, parse_requirements, query_osv
 
 
 class DependencyTests(unittest.TestCase):

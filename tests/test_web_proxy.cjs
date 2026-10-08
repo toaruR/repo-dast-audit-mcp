@@ -1,7 +1,7 @@
 'use strict';
 const test=require('node:test'), assert=require('node:assert/strict');
 const http=require('node:http'), fs=require('node:fs'), path=require('node:path'), Module=require('node:module');
-const filename=path.resolve(__dirname,'../src/repository_vulnerability_report_mcp/web_audit/browser_worker.cjs');
+const filename=path.resolve(__dirname,'../src/repo_dast_audit_mcp/web_audit/browser_worker.cjs');
 const implementation=new Module(filename,module);
 implementation.filename=filename;
 implementation.paths=module.paths;

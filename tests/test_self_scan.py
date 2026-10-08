@@ -21,7 +21,7 @@ class SelfScanTests(unittest.TestCase):
             environment["LOCALAPPDATA"] = str(appdata)
             environment["PYTHONUTF8"] = "1"
             process = subprocess.Popen(
-                [str(PYTHON), "-m", "repository_vulnerability_report_mcp.server"],
+                [str(PYTHON), "-m", "repo_dast_audit_mcp.server"],
                 cwd=ROOT,
                 env=environment,
                 stdin=subprocess.PIPE,
@@ -60,7 +60,7 @@ class SelfScanTests(unittest.TestCase):
                 if not tracked:
                     self.assertEqual(terminal["state"], "partial")
                     self.assertTrue(any(item["reason"] == "EMPTY_INVENTORY" for item in report["uncertainty"]))
-                records = appdata / "repository-vulnerability-report-mcp" / "records" / scan_id / "generations" / str(terminal["revision"])
+                records = appdata / "repo-dast-audit-mcp" / "records" / scan_id / "generations" / str(terminal["revision"])
                 self.assertTrue((records / "report.json").is_file())
                 self.assertTrue((records / "report.md").is_file())
                 self.assertFalse((records / "report.json").is_relative_to(ROOT))

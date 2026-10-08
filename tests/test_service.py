@@ -4,11 +4,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from repository_vulnerability_report_mcp.config import ServerConfig
-from repository_vulnerability_report_mcp.render import render_report
-from repository_vulnerability_report_mcp.report import build_report
-from repository_vulnerability_report_mcp.service import ScanService
-from repository_vulnerability_report_mcp.state import revise
+from repo_dast_audit_mcp.config import ServerConfig
+from repo_dast_audit_mcp.render import render_report
+from repo_dast_audit_mcp.report import build_report
+from repo_dast_audit_mcp.service import ScanService
+from repo_dast_audit_mcp.state import revise
 
 
 class ServiceTests(unittest.TestCase):

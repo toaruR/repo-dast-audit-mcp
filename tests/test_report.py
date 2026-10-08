@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from repository_vulnerability_report_mcp.report import ReportError, build_report, canonical_bytes
+from repo_dast_audit_mcp.report import ReportError, build_report, canonical_bytes
 
 
 def _state() -> dict[str, object]:

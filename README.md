@@ -1,4 +1,6 @@
-# Repository Vulnerability Report MCP
+# repo-dast-audit-mcp
+
+> **Status: prototype.** This project is an experimental prototype. Interfaces, storage layout, and audit behavior may change without notice; it is not intended for production use.
 
 Bounded MCP server that inventories tracked Git files and writes canonical JSON and Markdown reports to server-owned storage. Static scans are read-only; an opt-in browser audit tests registered local web-service fixtures.
 
@@ -13,10 +15,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\bootstrap-python.ps1
 Start the newline-delimited JSON-RPC stdio server with that environment:
 
 ```powershell
-.\.venv\Scripts\python.exe -m repository_vulnerability_report_mcp.server
+.\.venv\Scripts\python.exe -m repo_dast_audit_mcp.server
 ```
 
-The server writes protocol responses only to stdout. Its scan records and `report.json` / `report.md` files are kept outside the repository under `%LOCALAPPDATA%\repository-vulnerability-report-mcp`.
+The server writes protocol responses only to stdout. Its scan records and `report.json` / `report.md` files are kept outside the repository under `%LOCALAPPDATA%\repo-dast-audit-mcp`.
 
 ## Project-local MCP registration
 
@@ -25,10 +27,10 @@ Add this entry to this project's `.mcp.json` when registering it with an MCP-cap
 ```json
 {
   "mcpServers": {
-    "repository-vulnerability-report": {
+    "repo-dast-audit": {
       "type": "stdio",
       "command": "/path/to/project/.venv/Scripts/python.exe",
-      "args": ["-m", "repository_vulnerability_report_mcp.server"],
+      "args": ["-m", "repo_dast_audit_mcp.server"],
       "env": {"PYTHONUTF8": "1"}
     }
   }

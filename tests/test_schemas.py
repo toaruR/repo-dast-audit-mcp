@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from repository_vulnerability_report_mcp.schemas import (
+from repo_dast_audit_mcp.schemas import (
     JSON_SCHEMA_DRAFT_2020_12,
     InvalidToolArguments,
     TOOL_DEFINITIONS,

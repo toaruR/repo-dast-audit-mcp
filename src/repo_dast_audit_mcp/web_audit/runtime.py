@@ -11,7 +11,7 @@ import uuid
 from pathlib import Path
 from .profiles import AuditError, Profile
 
-LABEL = "repository-web-audit"
+LABEL = "repo-dast-audit"
 
 class DockerRuntime:
     def __init__(self, profile: Profile, snapshot: Path, audit_id: str):

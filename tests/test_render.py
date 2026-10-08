@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import unittest
 
-from repository_vulnerability_report_mcp.render import escape_markdown, render_markdown, render_report
-from repository_vulnerability_report_mcp.report import ReportError, build_report
+from repo_dast_audit_mcp.render import escape_markdown, render_markdown, render_report
+from repo_dast_audit_mcp.report import ReportError, build_report
 
 
 def _report() -> dict[str, object]:

@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-from repository_vulnerability_report_mcp.config import (
+from repo_dast_audit_mcp.config import (
     ConfigurationError,
     LIMIT_BOUNDS,
     Limits,

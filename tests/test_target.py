@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from repository_vulnerability_report_mcp.target import TargetError, canonical_target
+from repo_dast_audit_mcp.target import TargetError, canonical_target
 
 
 class TargetTests(unittest.TestCase):

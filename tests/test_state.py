@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 import uuid
 
-from repository_vulnerability_report_mcp.state import StateError, new_state, observe_cancellation, progress, request_cancellation, validate_state
+from repo_dast_audit_mcp.state import StateError, new_state, observe_cancellation, progress, request_cancellation, validate_state
 
 
 class StateTests(unittest.TestCase):

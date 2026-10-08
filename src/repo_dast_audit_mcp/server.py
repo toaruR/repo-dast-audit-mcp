@@ -1,4 +1,4 @@
-"""NDJSON stdio entry point for the repository vulnerability report MCP."""
+"""NDJSON stdio entry point for the repo-dast-audit MCP."""
 
 from __future__ import annotations
 

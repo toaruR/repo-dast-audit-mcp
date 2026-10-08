@@ -65,8 +65,8 @@ def provision(root: Path, runtime: Path, core: Path, project_profile: Path | Non
     shutil.copytree(core,target,dirs_exist_ok=True)
     shutil.copy2(Path(__file__).with_name("browser_worker.cjs"),context/"browser_worker.cjs")
     atomic(context/"Dockerfile",f"FROM {BASE}\nUSER root\nRUN mkdir /worker\nCOPY . /worker/\nUSER pwuser\nWORKDIR /worker\n".encode())
-    docker("build","--network=none","--pull=false","--tag","repository-web-audit-worker:"+VERSION,context)
-    worker=json.loads(docker("image","inspect","repository-web-audit-worker:"+VERSION))[0]["Id"]
+    docker("build","--network=none","--pull=false","--tag","repo-dast-audit-worker:"+VERSION,context)
+    worker=json.loads(docker("image","inspect","repo-dast-audit-worker:"+VERSION))[0]["Id"]
     if project_profile:
         profile=json.loads(project_profile.read_text(encoding="utf-8"))
         profile.update(root=str(root.resolve()),worker_image=worker,seccomp=str(seccomp))

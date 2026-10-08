@@ -10,18 +10,18 @@ import time
 import unittest
 import uuid
 
-from repository_vulnerability_report_mcp.web_audit.profiles import load_profiles, snapshot
-from repository_vulnerability_report_mcp.web_audit.runtime import DockerRuntime
+from repo_dast_audit_mcp.web_audit.profiles import load_profiles, snapshot
+from repo_dast_audit_mcp.web_audit.runtime import DockerRuntime
 from test_web_audit import validate_document
 
 @unittest.skipUnless(os.environ.get("WEB_AUDIT_INTEGRATION")=="1","Requires isolated Docker browser runtime")
 class BrowserIntegrationTests(unittest.TestCase):
     def test_paired_fixture_through_stdio(self):
-        registry=Path(os.environ["REPOSITORY_WEB_PROFILES"]).resolve()
+        registry=Path(os.environ["REPO_DAST_PROFILES"]).resolve()
         profiles=load_profiles(registry)
         with tempfile.TemporaryDirectory(prefix="web-audit-") as temp:
-            env=dict(os.environ,REPOSITORY_WEB_AUDIT="1",LOCALAPPDATA=temp)
-            process=subprocess.Popen([sys.executable,"-m","repository_vulnerability_report_mcp.server"],
+            env=dict(os.environ,REPO_DAST_AUDIT="1",LOCALAPPDATA=temp)
+            process=subprocess.Popen([sys.executable,"-m","repo_dast_audit_mcp.server"],
                 stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,encoding="utf-8",env=env)
             counter=0
             def call(name,args):
@@ -115,7 +115,7 @@ class BrowserIntegrationTests(unittest.TestCase):
                     call("finish_web_audit",{"audit_id":audit,"expected_revision":value["revision"],"reason":"client_finished"})
                     final=wait(audit,lambda x:x["state"]=="completed")
                     self.assertEqual(final["result"]["cleanup"]["status"],"verified")
-                    residual=subprocess.check_output(["docker","ps","-a","--filter","label=repository-web-audit="+audit,"-q"],text=True)
+                    residual=subprocess.check_output(["docker","ps","-a","--filter","label=repo-dast-audit="+audit,"-q"],text=True)
                     self.assertEqual(residual.strip(),"")
             finally:
                 process.stdin.close()
@@ -127,22 +127,22 @@ class BrowserIntegrationTests(unittest.TestCase):
 
 
     def test_registered_repository_and_crash_recovery(self):
-        from repository_vulnerability_report_mcp.web_audit.setup import reference_profile
-        registry=Path(os.environ["REPOSITORY_WEB_PROFILES"]).resolve()
+        from repo_dast_audit_mcp.web_audit.setup import reference_profile
+        registry=Path(os.environ["REPO_DAST_PROFILES"]).resolve()
         reference=load_profiles(registry)["fixture_vulnerable"]
         with tempfile.TemporaryDirectory(prefix="web-audit-project-") as temporary:
             base=Path(temporary).resolve(); root=base/"project"; root.mkdir()
-            source=Path(__file__).resolve().parents[1]/"src/repository_vulnerability_report_mcp/web_audit/fixture_app.py"
+            source=Path(__file__).resolve().parents[1]/"src/repo_dast_audit_mcp/web_audit/fixture_app.py"
             payload=source.read_bytes(); (root/"service.py").write_bytes(payload)
             subprocess.run(["git","init",str(root)],capture_output=True,check=True)
             subprocess.run(["git","-C",str(root),"add","service.py"],capture_output=True,check=True)
             profile=reference_profile(root,reference.image,reference.worker_image,reference.seccomp)
             profile.update(id="local_project",fixture=False,argv=["python3","-B","/app/service.py"])
             operator_registry=base/"profiles.json"; operator_registry.write_text(json.dumps({"profiles":[profile]}))
-            env=dict(os.environ,REPOSITORY_WEB_AUDIT="1",REPOSITORY_WEB_PROFILES=str(operator_registry),LOCALAPPDATA=str(base/"cache"))
+            env=dict(os.environ,REPO_DAST_AUDIT="1",REPO_DAST_PROFILES=str(operator_registry),LOCALAPPDATA=str(base/"cache"))
             process=None; counter=0
             def launch():
-                return subprocess.Popen([sys.executable,"-m","repository_vulnerability_report_mcp.server"],
+                return subprocess.Popen([sys.executable,"-m","repo_dast_audit_mcp.server"],
                     stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,encoding="utf-8",env=env)
             def call(name,args):
                 nonlocal counter
@@ -212,8 +212,8 @@ class BrowserIntegrationTests(unittest.TestCase):
                 self.assertEqual(recovered["state"],"interrupted")
                 self.assertEqual(recovered["result"]["cleanup"]["status"],"verified")
                 self.assertEqual(recovered["result"]["actions"][0]["status"],"outcome_unknown")
-                for command in (["docker","ps","-a","--filter","label=repository-web-audit="+crash_audit,"-q"],
-                                ["docker","volume","ls","--filter","label=repository-web-audit="+crash_audit,"-q"]):
+                for command in (["docker","ps","-a","--filter","label=repo-dast-audit="+crash_audit,"-q"],
+                                ["docker","volume","ls","--filter","label=repo-dast-audit="+crash_audit,"-q"]):
                     self.assertEqual(subprocess.check_output(command,text=True).strip(),"")
                 print("process_restart: unknown outcome preserved; containers and volume removed",flush=True)
             finally: stop()

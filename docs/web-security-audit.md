@@ -12,11 +12,11 @@ DockerのLinuxコンテナとNode.js/npmが必要。ブラウザ環境の作成�
 npm install --prefix .web-audit-runtime/node-runtime --ignore-scripts --save-exact playwright-core@1.62.1
 
 $browserCore = Join-Path (Get-Location) '.web-audit-runtime/node-runtime/node_modules/playwright-core'
-.\.venv\Scripts\python.exe -m repository_vulnerability_report_mcp.web_audit.setup --root (Get-Location).Path --playwright-core $browserCore
+.\.venv\Scripts\python.exe -m repo_dast_audit_mcp.web_audit.setup --root (Get-Location).Path --playwright-core $browserCore
 
-$env:REPOSITORY_WEB_AUDIT = '1'
-$env:REPOSITORY_WEB_PROFILES = (Resolve-Path .web-audit-runtime/profiles.json).Path
-.\.venv\Scripts\python.exe -m repository_vulnerability_report_mcp.server
+$env:REPO_DAST_AUDIT = '1'
+$env:REPO_DAST_PROFILES = (Resolve-Path .web-audit-runtime/profiles.json).Path
+.\.venv\Scripts\python.exe -m repo_dast_audit_mcp.server
 ```
 
 setupは固定digestの公式Playwrightイメージ、Playwright Core 1.62.1、同版のseccomp設定から専用workerイメージを作る。seccompには、capabilityを追加せずChromiumのユーザー名前空間内で必要なchroot syscallを許可する。イメージIDとseccompのhashを検査時に確認する。生成物はGit対象外の `.web-audit-runtime/` に置く。
@@ -28,14 +28,14 @@ MCP登録例:
 ```json
 {
   "mcpServers": {
-    "repository-vulnerability-report": {
+    "repo-dast-audit": {
       "type": "stdio",
       "command": "/path/to/project/.venv/Scripts/python.exe",
-      "args": ["-m", "repository_vulnerability_report_mcp.server"],
+      "args": ["-m", "repo_dast_audit_mcp.server"],
       "env": {
         "PYTHONUTF8": "1",
-        "REPOSITORY_WEB_AUDIT": "1",
-        "REPOSITORY_WEB_PROFILES": "/path/to/project/.web-audit-runtime/profiles.json"
+        "REPO_DAST_AUDIT": "1",
+        "REPO_DAST_PROFILES": "/path/to/project/.web-audit-runtime/profiles.json"
       }
     }
   }
@@ -80,7 +80,7 @@ MCP登録例:
 この例は起動契約の形を示す。認証、nonce用resource、実際のHTMLやレスポンスに対応する設定を追加してから使う。`setup.reference_profile` の合成アプリ用設定も参照できる。
 
 ```powershell
-.\.venv\Scripts\python.exe -m repository_vulnerability_report_mcp.web_audit.setup --root /path/to/project --playwright-core $browserCore --project-profile /path/to/operator-profile.json
+.\.venv\Scripts\python.exe -m repo_dast_audit_mcp.web_audit.setup --root /path/to/project --playwright-core $browserCore --project-profile /path/to/operator-profile.json
 ```
 
 setupはroot、worker_image、seccompを設定し、image未指定なら標準イメージを使用する。別の実行環境を使う場合、操作者が依存を含むイメージを事前作成し、`image` に `sha256:` と64桁のIDを指定する。コンテナは `/app` を作業ディレクトリにして起動する。
@@ -162,7 +162,7 @@ get_web_auditのページcursorはrevisionに紐付き、変更後の古いcurso
 node --test tests/test_web_proxy.cjs
 
 $env:WEB_AUDIT_INTEGRATION = '1'
-$env:REPOSITORY_WEB_PROFILES = (Resolve-Path .web-audit-runtime/profiles.json).Path
+$env:REPO_DAST_PROFILES = (Resolve-Path .web-audit-runtime/profiles.json).Path
 .\.venv\Scripts\python.exe -m unittest discover -s tests -p test_web_integration.py -v
 ```
 

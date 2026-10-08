@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from repository_vulnerability_report_mcp.analyzers import analyze_python_ast, analyze_secret_text
+from repo_dast_audit_mcp.analyzers import analyze_python_ast, analyze_secret_text
 
 
 class AnalyzerTests(unittest.TestCase):

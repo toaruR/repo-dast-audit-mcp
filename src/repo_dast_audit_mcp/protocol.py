@@ -127,7 +127,7 @@ class JsonRpcProtocol:
             "result": {
                 "protocolVersion": version,
                 "capabilities": {"tools": {}},
-                "serverInfo": {"name": "repository-vulnerability-report-mcp", "version": "0.1.0"},
+                "serverInfo": {"name": "repo-dast-audit-mcp", "version": "0.1.0"},
             },
         }
 

@@ -4,8 +4,8 @@ from io import BytesIO, StringIO
 import json
 import unittest
 
-from repository_vulnerability_report_mcp.config import Limits
-from repository_vulnerability_report_mcp.protocol import JsonRpcProtocol, serve_stdio
+from repo_dast_audit_mcp.config import Limits
+from repo_dast_audit_mcp.protocol import JsonRpcProtocol, serve_stdio
 
 
 class ProtocolTests(unittest.TestCase):

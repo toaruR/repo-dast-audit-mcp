@@ -3,8 +3,8 @@ from __future__ import annotations
 import tempfile
 import unittest
 
-from repository_vulnerability_report_mcp.state import revise
-from repository_vulnerability_report_mcp.store import ScanStore, StorageError
+from repo_dast_audit_mcp.state import revise
+from repo_dast_audit_mcp.store import ScanStore, StorageError
 
 
 class StoreTests(unittest.TestCase):

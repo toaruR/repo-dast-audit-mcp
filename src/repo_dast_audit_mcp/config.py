@@ -93,8 +93,8 @@ def default_cache_dir() -> Path:
     """Return the documented current-user cache location without creating it."""
     local_app_data = os.environ.get("LOCALAPPDATA")
     if local_app_data:
-        return Path(local_app_data) / "repository-vulnerability-report-mcp"
-    return Path.home() / "AppData" / "Local" / "repository-vulnerability-report-mcp"
+        return Path(local_app_data) / "repo-dast-audit-mcp"
+    return Path.home() / "AppData" / "Local" / "repo-dast-audit-mcp"
 
 
 @dataclass(frozen=True, slots=True)
@@ -136,7 +136,7 @@ def require_cpython_312(
     actual_version = version or (sys.version_info.major, sys.version_info.minor)
     if actual_implementation.lower() != REQUIRED_IMPLEMENTATION or actual_version != REQUIRED_VERSION:
         raise ConfigurationError(
-            "repository-vulnerability-report-mcp requires CPython 3.12; "
+            "repo-dast-audit-mcp requires CPython 3.12; "
             f"got {actual_implementation} {actual_version[0]}.{actual_version[1]}"
         )
 
@@ -144,9 +144,9 @@ def require_cpython_312(
 def load_server_config() -> ServerConfig:
     """Build the fixed default server configuration after runtime validation."""
     require_cpython_312()
-    enabled = os.environ.get("REPOSITORY_WEB_AUDIT") == "1"
-    profiles = os.environ.get("REPOSITORY_WEB_PROFILES")
+    enabled = os.environ.get("REPO_DAST_AUDIT") == "1"
+    profiles = os.environ.get("REPO_DAST_PROFILES")
     if enabled and (not profiles or not Path(profiles).is_absolute()):
-        raise ConfigurationError("Web auditing requires an absolute REPOSITORY_WEB_PROFILES path")
+        raise ConfigurationError("Web auditing requires an absolute REPO_DAST_PROFILES path")
     return ServerConfig(cache_dir=default_cache_dir(), web_audit_enabled=enabled,
                         web_profiles_path=Path(profiles) if profiles else None)

@@ -1,1 +1,1 @@
-"""Unit tests for repository-vulnerability-report-mcp."""
+"""Unit tests for repo-dast-audit-mcp."""

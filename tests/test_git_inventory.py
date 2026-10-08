@@ -5,13 +5,13 @@ import subprocess
 import tempfile
 import unittest
 
-from repository_vulnerability_report_mcp.git_inventory import (
+from repo_dast_audit_mcp.git_inventory import (
     InventoryError,
     git_environment,
     inventory_tracked_files,
     read_tracked_text,
 )
-from repository_vulnerability_report_mcp.target import canonical_target
+from repo_dast_audit_mcp.target import canonical_target
 
 
 class GitInventoryTests(unittest.TestCase):

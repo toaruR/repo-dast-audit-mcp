@@ -48,11 +48,11 @@ $sitePackages = & $venvPython -c "import sysconfig; print(sysconfig.get_paths()[
 if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $sitePackages -PathType Container)) {
     throw 'Failed to locate the local .venv site-packages directory.'
 }
-$pthPath = Join-Path $sitePackages 'repository_vulnerability_report_mcp.pth'
+$pthPath = Join-Path $sitePackages 'repo_dast_audit_mcp.pth'
 $sourcePath = Join-Path $repositoryRoot 'src'
 Set-Content -LiteralPath $pthPath -Value $sourcePath -Encoding ascii
 
-& $venvPython -c "import repository_vulnerability_report_mcp; print(repository_vulnerability_report_mcp.__version__)"
+& $venvPython -c "import repo_dast_audit_mcp; print(repo_dast_audit_mcp.__version__)"
 if ($LASTEXITCODE -ne 0) {
     throw 'Failed to install the local package into .venv.'
 }

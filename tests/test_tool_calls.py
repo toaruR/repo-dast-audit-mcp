@@ -4,9 +4,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from repository_vulnerability_report_mcp.config import ServerConfig
-from repository_vulnerability_report_mcp.protocol import JsonRpcProtocol
-from repository_vulnerability_report_mcp.service import ScanService
+from repo_dast_audit_mcp.config import ServerConfig
+from repo_dast_audit_mcp.protocol import JsonRpcProtocol
+from repo_dast_audit_mcp.service import ScanService
 
 
 class ToolCallTests(unittest.TestCase):

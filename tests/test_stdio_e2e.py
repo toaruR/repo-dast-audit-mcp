@@ -22,7 +22,7 @@ class StdioClient:
         environment["LOCALAPPDATA"] = str(appdata)
         environment["PYTHONUTF8"] = "1"
         self.process = subprocess.Popen(
-            [str(PYTHON), "-m", "repository_vulnerability_report_mcp.server"],
+            [str(PYTHON), "-m", "repo_dast_audit_mcp.server"],
             cwd=ROOT,
             env=environment,
             stdin=subprocess.PIPE,
@@ -138,7 +138,7 @@ class StdioEndToEndTests(unittest.TestCase):
         osv = [check for check in report["checks"] if check["id"] == "osv"]  # type: ignore[index]
         self.assertEqual([(check["status"], check["reason"]) for check in osv], [("skipped", "DISABLED")])
 
-        generation = self.appdata / "repository-vulnerability-report-mcp" / "records" / str(scan_id) / "generations" / str(completed["revision"])
+        generation = self.appdata / "repo-dast-audit-mcp" / "records" / str(scan_id) / "generations" / str(completed["revision"])
         report_path = generation / "report.json"
         markdown_path = generation / "report.md"
         self.assertTrue(report_path.is_file())
