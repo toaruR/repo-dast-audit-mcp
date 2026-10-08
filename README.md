@@ -1,6 +1,6 @@
 # Repository Vulnerability Report MCP
 
-Read-only, bounded MCP server that inventories tracked Git files and writes canonical JSON and Markdown reports to server-owned storage.
+Bounded MCP server that inventories tracked Git files and writes canonical JSON and Markdown reports to server-owned storage. Static scans are read-only; an opt-in browser audit tests registered local web-service fixtures.
 
 ## Local launch
 
@@ -36,3 +36,9 @@ Add this entry to this project's `.mcp.json` when registering it with an MCP-cap
 ```
 
 Project-local registration makes the definition available to clients that load this project. It does not inject the server into an already-running chat; restart or reconnect the client and confirm its MCP-server discovery flow.
+
+## Browser security audit
+
+The optional Docker/Chromium runtime adds nine MCP tools for browser observations, LLM-authored test proposals, controlled verification, evidence, and recovery. It currently verifies authorization isolation, reflected XSS, and registered business invariants against isolated test data.
+
+See [setup, project profiles, client workflow, limits, and verification](docs/web-security-audit.md). The default setup registers synthetic vulnerable/patched reference apps; register a project-specific profile to test your own service. Daybreak approval is not a server startup requirement.

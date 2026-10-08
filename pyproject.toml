@@ -9,8 +9,15 @@ description = "Read-only, bounded repository vulnerability report MCP server"
 requires-python = ">=3.12,<3.13"
 dependencies = []
 
+[project.optional-dependencies]
+test = ["jsonschema==4.23.0"]
+
 [project.scripts]
 repository-vulnerability-report-mcp = "repository_vulnerability_report_mcp.server:main"
+repository-web-audit-setup = "repository_vulnerability_report_mcp.web_audit.setup:main"
+
+[tool.setuptools.package-data]
+"repository_vulnerability_report_mcp.web_audit" = ["*.json", "*.cjs"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

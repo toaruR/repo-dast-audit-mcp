@@ -1,5 +1,8 @@
 __pycache__/
+*.egg-info/
+/build/
 .venv/
+.web-audit-runtime/
 *.pyc
 .knowledge-kit/
 .bm25_index.db

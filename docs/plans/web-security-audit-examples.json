@@ -1,0 +1,102 @@
+[
+  {
+    "tool": "start_web_audit",
+    "arguments": {
+      "root": "/path/to/project",
+      "profile_id": "orders_fixture_v1"
+    }
+  },
+  {
+    "tool": "web_action",
+    "arguments": {
+      "audit_id": "11111111-1111-4111-8111-111111111111",
+      "expected_revision": 7,
+      "client_action_id": "22222222-2222-4222-8222-222222222222",
+      "action": {
+        "kind": "navigate",
+        "actor_id": "user_b",
+        "path": "/orders"
+      }
+    }
+  },
+  {
+    "tool": "propose_web_case",
+    "arguments": {
+      "audit_id": "11111111-1111-4111-8111-111111111111",
+      "expected_revision": 10,
+      "case": {
+        "category": "authz_read",
+        "hypothesis": "user_a may read order_b despite the owner-only policy",
+        "actor_id": "user_a",
+        "resource_ref": "order_b",
+        "oracle_id": "authz_read_isolation_v1",
+        "baseline_observation_ids": [
+          "22222222-2222-4222-8222-222222222222"
+        ],
+        "source_refs": [
+          "orders_handler_v1"
+        ],
+        "steps": [
+          {
+            "kind": "replay_request",
+            "actor_id": "user_a",
+            "template_ref": "read_order_v1",
+            "mutations": [
+              {
+                "field_ref": "order_id_field",
+                "value": {
+                  "fixture_ref": "order_b"
+                }
+              }
+            ]
+          }
+        ],
+        "effects": [
+          "network_read"
+        ]
+      }
+    }
+  },
+  {
+    "tool": "verify_web_case",
+    "arguments": {
+      "audit_id": "11111111-1111-4111-8111-111111111111",
+      "expected_revision": 11,
+      "case_id": "22222222-2222-4222-8222-222222222222",
+      "client_action_id": "33333333-3333-4333-8333-333333333333"
+    }
+  },
+  {
+    "ok": true,
+    "audit_id": "11111111-1111-4111-8111-111111111111",
+    "revision": 12,
+    "state": "testing",
+    "operation": "verify_web_case",
+    "result": {
+      "case_id": "22222222-2222-4222-8222-222222222222",
+      "action": {
+        "action_id": "44444444-4444-4444-8444-444444444444",
+        "client_action_id": "33333333-3333-4333-8333-333333333333",
+        "status": "prepared",
+        "observation_ids": [],
+        "artifact_ids": [],
+        "reason": null
+      }
+    }
+  },
+  {
+    "ok": false,
+    "code": "E_SCOPE",
+    "message": "Destination is outside the registered fixture scope",
+    "retryable": false,
+    "audit_id": "11111111-1111-4111-8111-111111111111"
+  },
+  {
+    "tool": "finish_web_audit",
+    "arguments": {
+      "audit_id": "11111111-1111-4111-8111-111111111111",
+      "expected_revision": 20,
+      "reason": "plan_complete"
+    }
+  }
+]

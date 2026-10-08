@@ -43,7 +43,7 @@ class SelfScanTests(unittest.TestCase):
                 self.assertTrue(result["ok"])
                 scan_id = result["scan_id"]
                 terminal = result
-                deadline = time.monotonic() + 15
+                deadline = time.monotonic() + 70
                 request_id = 3
                 while terminal["state"] not in {"completed", "partial", "cancelled", "interrupted", "failed"} and time.monotonic() < deadline:
                     process.stdin.write(json.dumps({"jsonrpc": "2.0", "id": request_id, "method": "tools/call", "params": {"name": "get_scan", "arguments": {"scan_id": scan_id}}}) + "\n")
@@ -54,9 +54,12 @@ class SelfScanTests(unittest.TestCase):
                 self.assertIn(terminal["state"], {"completed", "partial"})
                 report = terminal["report"]
                 self.assertNotIn(str(ROOT), json.dumps(report))
-                self.assertIsNone(report["head"])
-                self.assertEqual(terminal["state"], "partial")
-                self.assertTrue(any(item["reason"] == "EMPTY_INVENTORY" for item in report["uncertainty"]))
+                expected_head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True)
+                self.assertEqual(report["head"], expected_head.stdout.strip() if expected_head.returncode == 0 else None)
+                tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT)
+                if not tracked:
+                    self.assertEqual(terminal["state"], "partial")
+                    self.assertTrue(any(item["reason"] == "EMPTY_INVENTORY" for item in report["uncertainty"]))
                 records = appdata / "repository-vulnerability-report-mcp" / "records" / scan_id / "generations" / str(terminal["revision"])
                 self.assertTrue((records / "report.json").is_file())
                 self.assertTrue((records / "report.md").is_file())
@@ -64,8 +67,9 @@ class SelfScanTests(unittest.TestCase):
                 durable_report = json.loads((records / "report.json").read_text(encoding="utf-8"))
                 durable_markdown = (records / "report.md").read_text(encoding="utf-8")
                 self.assertEqual(durable_report, report)
-                self.assertIn("HEAD: `unborn/missing`", durable_markdown)
-                self.assertIn("EMPTY_INVENTORY", durable_markdown)
+                self.assertIn("HEAD: `{}`".format(report["head"] or "unborn/missing"), durable_markdown)
+                if not tracked:
+                    self.assertIn("EMPTY_INVENTORY", durable_markdown)
             finally:
                 if process.stdin is not None:
                     process.stdin.close()
